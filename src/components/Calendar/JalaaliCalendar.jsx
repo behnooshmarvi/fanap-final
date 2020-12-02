@@ -21,7 +21,7 @@ export class JalaaliCalendar extends Component {
 
   render() {
     return <div>
-      <Calendar style={{ height: 400, width: '60%', marginLeft: -180 }}
+      <Calendar 
         value={this.state.value}
         isGregorian={this.state.isGregorian}
         onChange={value => { this.setState({ value }) }}

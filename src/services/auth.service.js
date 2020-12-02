@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.1.8:3000/api/auth/";
+const API_URL = "http://localhost:3000/auth/";
 
 class AuthService {
-  logIn(userName, password) {
+  login(userName, password) {
     return axios
       .post(API_URL + "login", {
         userName,
@@ -23,7 +23,7 @@ class AuthService {
   }
 
   register(name, userName, password) {
-    return axios.post(API_URL + "register", {
+    return axios.post( API_URL + "register", {
       name,
       userName,
       password

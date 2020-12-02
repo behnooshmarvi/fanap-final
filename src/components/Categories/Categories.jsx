@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React,{useEffect,useState} from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -12,8 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import axios from 'axios';
 
+import axios from 'axios';
 
 
 
@@ -24,16 +25,15 @@ function stableSort(array) {
 }
 
 const headCells = [
-  { id: 'userId', numeric: false, disablePadding: true, label: 'شناسه' },
   { id: 'name', numeric: true, disablePadding: false, label: 'نام' },
-  { id: 'userName', numeric: true, disablePadding: false, label: 'نام كاربري' },
   { id: 'operation', numeric: true, disablePadding: false, label: '' },
+
 ];
 
 function EnhancedTableHead(props) {
 
   return (
-    <TableHead>
+    <TableHead stickyHeader aria-label="sticky table">
       <TableRow>
         <TableCell padding="checkbox">
         </TableCell>
@@ -42,16 +42,25 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={'right'}
             padding={headCell.disablePadding ? 'none' : 'default'}
-
+           
           >
-            {headCell.label}
-
+              {headCell.label}
+          
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
   );
 }
+
+EnhancedTableHead.propTypes = {
+  classes: PropTypes.object.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
@@ -61,13 +70,13 @@ const useToolbarStyles = makeStyles((theme) => ({
   highlight:
     theme.palette.type === 'light'
       ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
       : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
   title: {
     flex: '1 1 100%',
   },
@@ -81,43 +90,40 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
     boxShadow: '0 3px 15px rgba(0,0,0,.2)',
-    paddingBottom: '50px'
   },
-  table: {
-    // minWidth: 750,
-  },
-
+  
   icon: {
-    color: '#f50057',
-     fontSize: '18px',
+      color: '#f50057',
+       fontSize: '18px', 
+      
     
-  }
-
-
+  
+  },
 }));
 
-export default function EnhancedTableWithRadio(props) {
+export default function EnhancedTableWithRadio() {
   const classes = useStyles();
   const [selected, setSelected] = React.useState('');
   const [rows, setRows] = useState([]);
 
 
   useEffect(() => {
-    axios.get("/api/users")
-      .then(function (response) {
+    axios.get("/api/categories")
+      .then(function(response) {
         setRows(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log(error);
       })
   }, []);
 
+ 
 
   const handleClick = (event, name) => {
     let newSelected = selected;
 
     if (name !== selected) {
       newSelected = name;
-    } else {
+    } else  {
       newSelected = "";
     }
     setSelected(newSelected);
@@ -125,27 +131,28 @@ export default function EnhancedTableWithRadio(props) {
 
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
-  const toolbarClasses = useToolbarStyles();
-
+ const toolbarClasses = useToolbarStyles();
+ 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Toolbar
-          className={clsx(toolbarClasses.root)}
-        >
-          {(
-            <Typography className={toolbarClasses.title} variant="h6" id="tableTitle" component="div">
-              كاربران
+      <Toolbar
+      className={clsx(toolbarClasses.root)}
+    >
+      { (
+        <Typography className={toolbarClasses.title} variant="h6" id="tableTitle" component="div">
+            دسته بندي ها
         </Typography>
-          )}
-        </Toolbar>
+      )}
+    </Toolbar>
 
-        <TableContainer>
+        <TableContainer style={{position:"relative",height:"265px"}}>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size="small"
+            size = "small"
             aria-label="enhanced table"
+         
           >
             <EnhancedTableHead
               classes={classes}
@@ -165,7 +172,6 @@ export default function EnhancedTableWithRadio(props) {
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
-                      style={{ padding: '10px' }}
                     >
                       <TableCell padding="checkbox">
                         <Radio
@@ -173,18 +179,14 @@ export default function EnhancedTableWithRadio(props) {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none" align='right'>
-                        {row.id}
-                      </TableCell>
                       <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.userName}</TableCell>
                       <TableCell align="right">
                       <DeleteForeverIcon className={classes.icon} />
                       </TableCell>
                     </TableRow>
                   );
                 })}
-
+              
             </TableBody>
           </Table>
         </TableContainer>

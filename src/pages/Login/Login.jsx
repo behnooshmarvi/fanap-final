@@ -9,8 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Button from "components/Button";
-
-import { useAuth } from "providers/auth";
+import AuthService from 'services/auth.service' 
+//import { useAuth } from "providers/auth";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,12 +32,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Login() {
+export default function Login(){
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({ userName: "", password: "" });
   const [loading, setLoading] = React.useState(false);
-  const { Login } = useAuth();
+  const { Login } = AuthService.login();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -49,7 +49,7 @@ export default function Login() {
     setLoading(true);
     const { userName, password } = state;
     Login(userName, password)
-      .then(() => history.replace("/"))
+      .then(() => history.replace("/cost"))
       .catch(error => {
         setLoading(false);
         toast.error(error.message);
@@ -70,9 +70,9 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="userName"
-            name="username"
+            id="username"s
+            label="username"
+            name="userName"
             autoComplete="username"
             autoFocus
             value={state.userName}
@@ -100,7 +100,7 @@ export default function Login() {
             loading={loading}
             onClick={handleSubmit}
           >
-            Sign In
+ورود
           </Button>
           <Grid container>
             <Grid item>

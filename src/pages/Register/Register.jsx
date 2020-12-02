@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Button from "components/Button";
 
-import { useAuth } from "providers/auth";
+import AuthService from 'services/auth.service' 
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 export default function Register() {
   const classes = useStyles();
   const history = useHistory();
-  const { Register } = useAuth();
+  const { Register } = AuthService.register();
   const [state, setState] = React.useState({
     name: "",
     userName: "",
@@ -53,7 +53,7 @@ export default function Register() {
     setLoading(true);
     const { name, userName, password } = state;
     Register(userName, password, name)
-      .then(() => history.replace("/"))
+      .then(() => history.replace("/cost"))
       .catch(error => {
         setLoading(false);
         toast.error(error.message);
@@ -88,8 +88,8 @@ export default function Register() {
             required
             fullWidth
             id="username"
-            label="userName"
-            name="username"
+            label="username"
+            name="userName"
             autoComplete="username"
             value={state.userName}
             onChange={handleChange}
