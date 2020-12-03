@@ -139,6 +139,24 @@ createServer({
     this.get("/entries/:timestamp", (schema, request) => {
       const date = moment(+request.params.timestamp);
       return schema.entries.where(entry => date.isSame(entry.date, "day"));
+      
+    });
+    this.delete("/api/users/:id", (schema, request) => {
+      let id = request.params.id;
+
+      return schema.reminders.find(id).destroy();
+    });
+
+    this.delete("/api/categories/:id", (schema, request) => {
+      let id = request.params.id;
+
+      return schema.reminders.find(id).destroy();
+    });
+
+    this.delete("/api/entries/:id", (schema, request) => {
+      let id = request.params.id;
+
+      return schema.reminders.find(id).destroy();
     });
   }
 });

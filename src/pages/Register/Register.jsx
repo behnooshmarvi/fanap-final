@@ -4,83 +4,83 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-//import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
 import Button from "components/Button";
+import AuthService from "services/auth.service";
 
-import AuthService from 'services/auth.service' 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export default function Register() {
   const classes = useStyles();
   const history = useHistory();
-  const { Register } = AuthService.register();
   const [state, setState] = React.useState({
     name: "",
     userName: "",
-    password: ""
+    password: "",
   });
   const [loading, setLoading] = React.useState(false);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setState(st => ({ ...st, [name]: value }));
+    setState((st) => ({ ...st, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     const { name, userName, password } = state;
-    Register(userName, password, name)
-      .then(() => history.replace("/cost"))
-      .catch(error => {
+    AuthService.register(name, userName, password)
+      .then((response) => {
+        history.replace("/cost");
+      })
+      .catch((error) => {
+        console.log("error = ", error);
         setLoading(false);
         toast.error(error.message);
       });
+    console.log("--------- handleSubmit --------\n\n");
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-        
-        </Avatar>
+        <Avatar className={classes.avatar}></Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
-            autoComplete="name"
+            autoComplete="نام"
             name="name"
             variant="outlined"
             required
             fullWidth
             id="name"
-            label="Full Name"
+            label="نام"
             autoFocus
             value={state.name}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
           />
           <TextField
             variant="outlined"
@@ -88,11 +88,11 @@ export default function Register() {
             required
             fullWidth
             id="username"
-            label="username"
+            label="نام کاربری"
             name="userName"
-            autoComplete="username"
+            autoComplete="نام کاربری"
             value={state.userName}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
           />
           <TextField
             variant="outlined"
@@ -100,12 +100,12 @@ export default function Register() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="گذر واژه"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="گذر واژه"
             value={state.password}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
           />
           <Button
             type="submit"
@@ -114,14 +114,14 @@ export default function Register() {
             color="primary"
             className={classes.submit}
             loading={loading}
-            onClick={handleSubmit}
+            onClick={(e) => handleSubmit(e)}
           >
-            Sign Up
+            ثبت نام
           </Button>
           <Grid container>
             <Grid item>
               <Link to="/login" variant="body2">
-                Already have an account? Sign in
+                ورود
               </Link>
             </Grid>
           </Grid>

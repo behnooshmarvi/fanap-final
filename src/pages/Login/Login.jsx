@@ -4,65 +4,67 @@ import { Link, useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-//import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Button from "components/Button";
-import AuthService from 'services/auth.service' 
-//import { useAuth } from "providers/auth";
+import AuthService from "services/auth.service";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
-export default function Login(){
+export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const [state, setState] = React.useState({ userName: "", password: "" });
   const [loading, setLoading] = React.useState(false);
-  const { Login } = AuthService.login();
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setState(st => ({ ...st, [name]: value }));
+    setState((st) => ({ ...st, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
+    console.log("\n\n--------- handleSubmit --------");
     e.preventDefault();
     setLoading(true);
     const { userName, password } = state;
-    Login(userName, password)
-      .then(() => history.replace("/cost"))
-      .catch(error => {
+    console.log(JSON.parse(localStorage.getItem("user")));
+    AuthService.login(userName, password)
+      .then((response) => {
+        console.log("response = ", response);
+        history.replace("/cost");
+      })
+      .catch((error) => {
         setLoading(false);
         toast.error(error.message);
       });
+    console.log("--------- handleSubmit --------\n\n");
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-        </Avatar>
+        <Avatar className={classes.avatar}></Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -70,10 +72,11 @@ export default function Login(){
             margin="normal"
             required
             fullWidth
-            id="username"s
-            label="username"
+            id="username"
+            s
+            label="نام کاربری"
             name="userName"
-            autoComplete="username"
+            autoComplete="نام کاربری"
             autoFocus
             value={state.userName}
             onChange={handleChange}
@@ -84,10 +87,10 @@ export default function Login(){
             required
             fullWidth
             name="password"
-            label="Password"
+            label="گذر واژه"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="'گذر واژه"
             value={state.password}
             onChange={handleChange}
           />
@@ -100,12 +103,12 @@ export default function Login(){
             loading={loading}
             onClick={handleSubmit}
           >
-ورود
+            ورود
           </Button>
           <Grid container>
             <Grid item>
               <Link to="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"ثبت نام"}
               </Link>
             </Grid>
           </Grid>
